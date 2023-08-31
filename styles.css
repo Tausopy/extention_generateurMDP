@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    padding: 20px;
+}
+h1 {
+    font-size: 24px;
+}
+p {
+    font-size: 16px;
+}
+input[type="range"] {
+    width: 100%;
+}
+body {
+    font-family: Arial, sans-serif;
+    width: 250px; /* Largeur de l'extension */
+    height: 250px; /* Hauteur de l'extension */
+    margin: 0 auto; /* Centrer horizontalement */
+    padding: 20px; /* Marge intérieure */
+    border: 2px solid #333333; /* Bordure pour la mise en forme */
+}
+
+#generateButton {
+    display: block;
+    margin-top: 15px;
+}
