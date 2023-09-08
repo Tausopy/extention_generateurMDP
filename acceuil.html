@@ -7,16 +7,19 @@
 <body>
     <div class="container">
         <h1>Générer un MDP</h1>
+
         <p>Longueur du mot de passe</p>
         <input type="range" min="12" max="22" value="12" step="1" id="passwordLengthInput">
+
         <p>Caractères spéciaux</p>
-        <label>
-            <input type="radio" name="specialChars" value="no" checked> Non
+        <label for="specialCharsCheckbox" class="custom-checkbox">
+            <input type="checkbox" id="specialCharsCheckbox" class="switch_1"> Inclure des caractères spéciaux
         </label>
-        <label>
-            <input type="radio" name="specialChars" value="specialChars_choice"> Oui
-        </label>
-        <button id="generateButton">Générer</button>
+
+        <div class="center-button">
+            <button id="generateButton">Générer</button>
+        </div>
+
         <script src="generation.js"></script>
     </div>
 </body>

@@ -1,31 +1,96 @@
 body {
     font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-}
-.container {
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
     padding: 20px;
+    background: radial-gradient(at top right, rgb(27, 13, 62), rgb(53, 16, 148));
+    border: 2px solid rgb(23, 23, 22);
 }
+
+.container {
+    padding: 10px;
+    text-align: center;
+    color: rgb(169, 247, 114);
+}
+
 h1 {
     font-size: 24px;
+    color: rgb(31, 224, 31);
 }
+
 p {
     font-size: 16px;
+    color: rgb(169, 247, 114);
 }
+
 input[type="range"] {
     width: 100%;
 }
-body {
-    font-family: Arial, sans-serif;
-    width: 250px; /* Largeur de l'extension */
-    height: 250px; /* Hauteur de l'extension */
-    margin: 0 auto; /* Centrer horizontalement */
-    padding: 20px; /* Marge intérieure */
-    border: 2px solid #333333; /* Bordure pour la mise en forme */
+
+.center-button {
+    margin-top: 15px;
 }
 
 #generateButton {
-    display: block;
-    margin-top: 15px;
+    margin: 0 auto; /* Ajout pour centrer horizontalement */
 }
+
+
+
+
+.colorpalette{
+    color: rgb(169, 247, 114);
+    color: rgb(31, 224, 31);
+    color: rgb(27, 13, 62);
+    color: rgb(53, 16, 148);
+    color: rgb(23, 23, 22);
+}
+
+
+
+
+/* Modifier les styles du bouton de la checkbox */
+input[type="checkbox"].switch_1 {
+    font-size: 30px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 0.875em; /* Réduire la largeur */
+    height: 0.375em; /* Réduire la hauteur */
+    background: rgb(23, 23, 22);
+    border-radius: 3em;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+  }
+  
+  /* Modifier la couleur du bouton lorsque la checkbox est cochée */
+  input[type="checkbox"].switch_1:checked {
+    background: rgb(169, 247, 114);
+  }
+  
+  /* Ne pas oublier de mettre à jour la taille de l'ombre et du point de la checkbox */
+  input[type="checkbox"].switch_1:after {
+    position: absolute;
+    content: "";
+    width: 0.375em; /* Réduire la taille */
+    height: 0.375em; /* Réduire la taille */
+    border-radius: 50%;
+    background: #fff;
+    -webkit-box-shadow: 0 0 .0625em rgba(0, 0, 0, .3); /* Réduire la taille de l'ombre */
+    box-shadow: 0 0 .0625em rgba(0, 0, 0, .3); /* Réduire la taille de l'ombre */
+    -webkit-transform: scale(.25); /* Réduire la taille du point */
+    transform: scale(.25); /* Réduire la taille du point */
+    left: 0;
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+  }
+  
+  /* Ne pas oublier de mettre à jour la taille de la checkbox lorsque cochée */
+  input[type="checkbox"].switch_1:checked:after {
+    left: calc(100% - 0.375em); /* Réduire la taille de la checkbox cochée */
+  }
+  

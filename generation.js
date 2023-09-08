@@ -25,8 +25,8 @@ document.addEventListener("DOMContentLoaded", function() {
         const passwordLengthInput = document.getElementById("passwordLengthInput");
         const passwordLength = parseInt(passwordLengthInput.value);
 
-        const specialCharsCheckbox = document.querySelector('input[name="specialChars"]:checked');
-        const useSpecialChars = specialCharsCheckbox.value === 'specialChars_choice';
+        const specialCharsCheckbox = document.getElementById("specialCharsCheckbox");
+        const useSpecialChars = specialCharsCheckbox.checked;
 
         const generatedPassword = generatePassword(passwordLength, useSpecialChars);
         // Copier le mot de passe dans le presse-papier
@@ -39,8 +39,5 @@ document.addEventListener("DOMContentLoaded", function() {
 
         console.log('Mot de passe généré :', generatedPassword);
     });
-
-
-
 
 });
