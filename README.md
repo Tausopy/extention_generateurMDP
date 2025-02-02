@@ -41,6 +41,11 @@ Ce tutoriel explique comment installer une extension Google Chrome ou Brave ou F
 2. Cliquez sur le bouton supprimer l'extension ou desactiver temporairement le mode développeur.
 
 
+## Debug
+Si aucun style n'es appliqué, ouvrez le projet depuis le terminal.
+La commade cd devrait faire apparaitre le fichier manifest.json. 
+d'ici, executez la commade sass styles.scss styles.css
+
 
 Félicitations ! Vous avez réussi à installer une extension à partir d'un dossier en activant le mode développeur. Profitez des fonctionnalités supplémentaires que cette extension apporte à votre expérience de navigation.
 

@@ -1,11 +1,11 @@
 {
   "name": "Générateur de mot de passe",
   "description": "Cette extention est un générateur personalisé de mot de passe. \nAuteur : Gautier Ralec \nupdates : Adding colors and style and a security issue",
-  "version": "3.2.1",
+  "version": "4.0",
   "manifest_version": 3,
   "permissions": ["activeTab"],
   "action": {
-    "default_popup": "acceuil.html",
+    "default_popup": "index.html",
     "default_icon": "logo_extention.png"
   }
 }

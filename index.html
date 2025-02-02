@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css">
+        <script src="generation.js"></script>
+    </head>
+<body>
+  <div class="container">
+    <h1>Générateur de mot de passe</h1>
+
+    <div class="slider-container">
+      <label for="length">
+        Longueur du mot de passe: <span id="sliderValue">12</span>
+      </label>
+      <input type="range" id="length" min="12" max="64" value="12" step="1">
+    </div>
+ 
+    <div class="checkboxes">
+      <label>
+        <input type="checkbox" id="includeUppercase" checked>
+        Inclure des majuscules
+      </label>
+    </div>
+    <div class="checkboxes">
+      <label>
+        <input type="checkbox" id="includeSpecials" checked>
+        Inclure des caractères spéciaux
+      </label>
+    </div>
+
+    <div class="button-container-1">
+        <span class="mas">Générer</span>
+        <button id="generate" type="button" name="Hover">Générer</button>
+    </div>
+      
+
+    <p id="result"></p>
+  </div>
+  
+  <script src="generation.js"></script>
+</body>
+</html>
