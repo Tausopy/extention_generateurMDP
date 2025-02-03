@@ -1,6 +1,6 @@
 **Tutoriel : Installation d'une extension depuis un dossier en activant le mode développeur**
 
-Ce tutoriel explique comment installer une extension Google Chrome ou Brave ou Firefox à partir d'un dossier local en activant le mode développeur. Le mode développeur est nécessaire pour charger des extensions non disponibles sur le Chrome Web Store. Suivez les étapes ci-dessous pour réussir l'installation :
+Ce tutoriel explique comment installer une extension Google Chrome ou Brave ou pas Firefox vu que ça marche po à partir d'un dossier local en activant le mode développeur. Le mode développeur est nécessaire pour charger des extensions non disponibles sur le Chrome Web Store. Suivez les étapes ci-dessous pour réussir l'installation :
 
 ### Étape 1 : Préparation de l'extension
 
