@@ -1,7 +1,7 @@
 {
   "name": "Générateur de mot de passe",
   "description": "Cette extention est un générateur personalisé de mot de passe. \nAuteur : Gautier Ralec \nupdates : Adding colors and style and a security issue",
-  "version": "4.0",
+  "version": "5.0",
   "manifest_version": 3,
   "permissions": ["activeTab"],
   "action": {

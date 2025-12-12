@@ -1,117 +1,158 @@
 'use strict';
-    
+
+/* =========================================================
+ *  RANDOM CRYPTO SANS BIAIS
+ * ========================================================= */
+
 /**
- * Génère un entier aléatoire dans l'intervalle [0, max-1] sans introduire de biais
- * grâce au rejection sampling.
- *
- * @param {number} max - La borne supérieure exclusive.
- * @return {number} Un entier aléatoire dans [0, max-1].
+ * Génère un entier aléatoire sécurisé dans [0, max-1]
+ * sans biais (rejection sampling)
  */
 function secureRandomIndex(max) {
   const maxRange = Math.floor((0xFFFFFFFF + 1) / max) * max;
   let rand;
   do {
     const array = new Uint32Array(1);
-    window.crypto.getRandomValues(array);
+    crypto.getRandomValues(array);
     rand = array[0];
   } while (rand >= maxRange);
   return rand % max;
 }
 
-/**
- * Génère un mot de passe sécurisé en construisant dynamiquement le jeu
- * de caractères en fonction des options choisies.
- *
- * @param {number} length - La longueur du mot de passe à générer.
- * @param {boolean} includeUppercase - Vrai pour inclure les majuscules.
- * @param {boolean} includeSpecials - Vrai pour inclure les caractères spéciaux.
- * @return {string} Le mot de passe généré.
- */
+/* =========================================================
+ *  GENERATION DE MOT DE PASSE
+ * ========================================================= */
+
 function generatePasswordSecure(length, includeUppercase, includeSpecials) {
-  let charset = "abcdefghijklmnopqrstuvwxyz";
-  charset += includeUppercase ? "ABCDEFGHIJKLMNOPQRSTUVWXYZ" : "";
-  charset += "0123456789";
-  charset += includeSpecials ? "!@#$%^&*()" : "";
-  
-  if (charset.length === 0) {
-    throw new Error("Le jeu de caractères est vide.");
+  let charset = 'abcdefghijklmnopqrstuvwxyz';
+  if (includeUppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  charset += '0123456789';
+  if (includeSpecials) charset += '!@#$%^&*()-_=+[]{}<>?';
+
+  if (!charset.length) {
+    throw new Error('Jeu de caractères vide');
   }
-  
-  let password = "";
+
+  let password = '';
   for (let i = 0; i < length; i++) {
-    const index = secureRandomIndex(charset.length);
-    password += charset[index];
+    password += charset[secureRandomIndex(charset.length)];
   }
   return password;
 }
 
-// Met à jour l'affichage de la valeur du slider
-function updateSliderValue() {
-  const slider = document.getElementById('length');
-  const display = document.getElementById('sliderValue');
-  display.textContent = slider.value;
+/* =========================================================
+ *  SHA-1 VIA WEB CRYPTO (HIBP)
+ * ========================================================= */
+
+async function sha1Hex(input) {
+  const buffer = await crypto.subtle.digest(
+    'SHA-1',
+    new TextEncoder().encode(input)
+  );
+
+  return Array.from(new Uint8Array(buffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
+    .toUpperCase();
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+/* =========================================================
+ *  VERIFICATION HIBP (k-Anonymity)
+ * ========================================================= */
+
+async function isPasswordPwned(password) {
+  const sha1 = await sha1Hex(password);
+  const prefix = sha1.slice(0, 5);
+  const suffix = sha1.slice(5);
+
+  const response = await fetch(
+    `https://api.pwnedpasswords.com/range/${prefix}`,
+    {
+      headers: {
+        'User-Agent': 'GautierPasswordGenerator/4.0'
+      }
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Erreur HIBP');
+  }
+
+  const body = await response.text();
+
+  return body.split('\n').some(line => {
+    const [hashSuffix] = line.trim().split(':');
+    return hashSuffix === suffix;
+  });
+}
+
+/* =========================================================
+ *  GENERATION SAFE (ANTI-PWNED)
+ * ========================================================= */
+
+async function generateSafePassword(
+  length,
+  includeUppercase,
+  includeSpecials
+) {
+  const MAX_ATTEMPTS = 10;
+
+  for (let i = 0; i < MAX_ATTEMPTS; i++) {
+    const password = generatePasswordSecure(
+      length,
+      includeUppercase,
+      includeSpecials
+    );
+
+    const compromised = await isPasswordPwned(password);
+    if (!compromised) {
+      return password;
+    }
+  }
+
+  throw new Error('Impossible de générer un mot de passe sain');
+}
+
+/* =========================================================
+ *  UI / EVENTS
+ * ========================================================= */
+
+function updateSliderValue() {
+  const slider = document.getElementById('length');
+  document.getElementById('sliderValue').textContent = slider.value;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
   const slider = document.getElementById('length');
   const generateButton = document.getElementById('generate');
   const resultElement = document.getElementById('result');
-  
-  // Affichage initial de la valeur du slider
+
   updateSliderValue();
-  
-  // Mise à jour en temps réel lors du déplacement du slider
   slider.addEventListener('input', updateSliderValue);
-  
-  // Gestion des flèches gauche et droite sur le slider pour ajuster la valeur de ±1
-  slider.addEventListener('keydown', function(event) {
-    let value = parseInt(slider.value, 10);
-    const min = parseInt(slider.min, 10);
-    const max = parseInt(slider.max, 10);
-    if (event.key === "ArrowLeft") {
-      if (value > min) {
-        slider.value = value - 1;
-        updateSliderValue();
-      }
-      event.preventDefault();
-    } else if (event.key === "ArrowRight") {
-      if (value < max) {
-        slider.value = value + 1;
-        updateSliderValue();
-      }
-      event.preventDefault();
-    }
-  });
-  
-  // Déclenche la génération en appuyant sur la touche "Entrée"
-  document.addEventListener('keydown', function(event) {
-    if (event.key === "Enter") {
-      generateButton.click();
-      event.preventDefault();
-    }
-  });
-  
-  // Au clic sur "Générer", on récupère les options et on affiche le mot de passe généré
-  generateButton.addEventListener('click', function () {
+
+  generateButton.addEventListener('click', async () => {
     const length = parseInt(slider.value, 10);
     const includeUppercase = document.getElementById('includeUppercase').checked;
     const includeSpecials = document.getElementById('includeSpecials').checked;
-  
+
+    resultElement.textContent = 'Analyse sécurité…';
+
     try {
-      const password = generatePasswordSecure(length, includeUppercase, includeSpecials);
+      const password = await generateSafePassword(
+        length,
+        includeUppercase,
+        includeSpecials
+      );
+
       resultElement.textContent = password;
-  
-      // Copier le mot de passe dans le presse-papier en utilisant l'API moderne
-      navigator.clipboard.writeText(password)
-        .then(() => {
-          console.log('Mot de passe copié dans le presse-papier');
-        })
-        .catch(err => {
-          console.error('Erreur lors de la copie dans le presse-papier :', err);
-        });
-  
-    } catch (error) {
-      resultElement.textContent = error.message;
+      await navigator.clipboard.writeText(password);
+
+    } catch (err) {
+      resultElement.textContent = err.message;
     }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') generateButton.click();
   });
 });
